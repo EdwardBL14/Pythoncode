@@ -1,0 +1,149 @@
+import numpy as np
+import random
+
+def game(n, myturn):
+    n = int(n)
+    A = np.full((n, n), '*', dtype=str)
+    for g in range(n**2):
+        if myturn == 0:
+            print("Your turn to make a cell zero")
+            print(A)
+            rowcord = int(input("what row is your cell in")) -1 
+            colcord = int(input("what column is your cell in")) - 1
+            A[rowcord,colcord] = '0'
+            count = np.count_nonzero(A == '*')
+            if count == 0:
+                if np.linalg.det(A) == 0:
+                    print("You win") 
+                break
+            myturn = 1
+
+        elif myturn == 1:
+            print("Opponent's move")
+            num_empty_cells = np.count_nonzero(A == '*')
+            rand1 = random.randint(1, num_empty_cells)
+            for k in range(n):
+                for l in range(n):
+                    if A[k, l] == '*':
+                        rand1 -= 1
+                        if rand1 == 0:
+                            print("Opponent puts a 1 in the " + str(k + 1) + "-th row and the " + str(l + 1) + "-th column")
+                            A[k, l] = '1'
+                            break
+                if rand1 == 0:
+                    break
+            myturn = 0
+    count2 = np.count_nonzero(A == '*')
+    if count2 == 0:
+        if np.linalg.det(A.astype(float)) == 0:
+            print("You win !!")
+        else:
+            print("Loser")
+
+#game(5,1) Playing a game on a 5x5 grid with player 1 acting first
+
+import numpy as np
+import random
+
+
+
+
+def game(n, myturn):
+    n = int(n)
+    A = np.full((n, n), '*', dtype=str)
+    for g in range(n**2+1):
+        if myturn == 0:
+            #print("P0's turn to make a cell zero")
+            #print(A)
+            k = 0
+            c=0
+            for l in range(n):
+                if A[k, l] == '1' and A[k+1, l] == '*':
+                    A[k+1, l] = '0'
+                    c=1
+                    #print("P0 puts a 0 in the " + str(k + 2) + "-th row and the " + str(l + 1) + "-th column")
+                    break
+                if A[k+1, l] == '1' and A[k, l] == '*':
+                    A[k, l] = '0'
+                    c=1
+                    #print("P0 puts a 0 in the " + str(k + 1) + "-th row and the " + str(l + 1) + "-th column")
+                    break
+                if A[k+2, l] == '1' and A[k+3, l] == '*':
+                    A[k+3, l] = '0'
+                    c=1
+                    #print("P0 puts a 0 in the " + str(k + 4) + "-th row and the " + str(l + 1) + "-th column")
+                    break
+                if A[k+3, l] == '1' and A[k+2, l] == '*':
+                    A[k+2, l] = '0'
+                    c=1
+                    #print("P0 puts a 0 in the " + str(k + 3) + "-th row and the " + str(l + 1) + "-th column")
+                    break
+            if c == 0:         
+                for i in range(n-4):
+                    for l in range(n):
+                        if A[i+4,l] == '*':
+                            A[i+4,l] = 0 
+                            #print("P0 puts a 0 in the " + str(i + 5) + "-th row and the " + str(l + 1) + "-th column")
+                            c = 1
+                            #print(c)
+                            break
+                        else:
+                            continue
+                    if c != 0:
+                        break
+                    
+            count = np.count_nonzero(A == '*')
+            if count == 0:
+                if np.linalg.det(A.astype(float)) == 0:
+                    print("P0 wins")
+                    #print(A)
+                    myturn = 2
+                    break
+                else:
+                    print("P1 wins")
+                    #print(A)
+                    myturn = 2
+            myturn = 1
+
+        elif myturn == 1:
+            #print("Opponent's move")
+            numaster = np.count_nonzero(A == '*')
+            if numaster >= 1:
+                rand1 = random.randint(1, numaster)
+            elif numaster ==0:
+                break
+            for k in range(n):
+                for l in range(n):
+                    if A[k, l] == '*':
+                        rand1 -= 1
+                        if rand1 == 0:
+                            #print("P1 puts a 1 in the " + str(k + 1) + "-th row and the " + str(l + 1) + "-th column")
+                            A[k, l] = '1'
+                            break
+                if rand1 == 0:
+                    break
+            #print(A)
+            
+            myturn = 0
+
+            count2 = np.count_nonzero(A == '*')
+            if count2 == 0:
+                if np.linalg.det(A.astype(float)) == 0:
+                    print("P0 wins")
+                    #print(A)
+                    myturn = 2
+                    break
+                else:
+                    print("P1 wins")
+                    #print(A)
+                    myturn = 2
+                    break
+            myturn = 0
+                
+        
+
+#game(5, 1)
+
+for i in range(10): #Giving the outputs of the winners of games for n = 6,7,8..etc
+    game(i+5,0)
+    game(i+5,1)
